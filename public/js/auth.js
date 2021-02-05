@@ -16,32 +16,37 @@ firebase.analytics();
 
 
 
-
-
 $(document).ready(function ($) {
 
-    firebase.auth().onAuthStateChanged(function (user){
-        if (user) { console.log('log', user)}
-        else{ console.log('err', 'not yet')}
+    firebase.auth().onAuthStateChanged(function (user) {
+        var cu = window.location.href;
+        var n1 = cu.indexOf('login');
+
+        if (user) {
+            if (n1 > 1) {
+                window.open('../index.html', '_self', false);               
+            }
+
+        } else {
+            if (n1 < 1) {
+                window.open('../auth/login/index.html','_self', false);
+            }
+        }
+
     });
 
 });
 
 
 
-
-
-
 function login()
 {
-
     firebase.auth().signInWithEmailAndPassword($("#txtemail").val(), $("#txtpasswd").val()).then(function(result) {
       
     }).catch(function (error)  {
       var errorCode = error.code;
       alert (errorCode);
-    });
-    
+    });    
 }
 
 
