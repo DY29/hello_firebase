@@ -13,9 +13,21 @@ function newpost() {
             })
             .then(function (result) {
                 alert("Success");
-             });
+            });
     }
 
 }
 
+
+function loadpost() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+        var ref = firebase.database().ref("post/");
+        ref.orderByChild('uid').equalTo(user.uid).limitToLast(1).once('value', function (data) {
+            data.forEach(function (sdata) {
+                $("#message").val(sdata.val().contents);
+            })
+        });
+    }
+}
 
