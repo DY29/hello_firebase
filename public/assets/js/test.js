@@ -23,20 +23,21 @@ function loadpost() {
     var user = firebase.auth().currentUser;
     if (user) {
         var ref = firebase.database().ref("post/");
-        ref.orderByChild('uid').equalTo(user.uid).limitToLast(1).once('value', function (data) {
+        
+        ref.orderByChild('uid').equalTo(user.uid).limitToLast(1).on('value', function (data) {
             data.forEach(function (sdata) {
                 $("#message").val(sdata.val().contents);
-                $("#message").attr('key',sdata.key);
+                $("#message").attr('key', sdata.key);
             })
         });
     }
 }
 
 function updatepost() {
-    
+
     var user = firebase.auth().currentUser;
 
-    if (user){
+    if (user) {
         var _key = $("#message").attr('key');
         var ref = firebase.database().ref('post/' + _key + "/");
         var udata = {
@@ -44,6 +45,26 @@ function updatepost() {
             newvalue: ''
         };
         ref.update(udata);
-    } 
+    }
+
+}
+
+
+function deletepost() {
+
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+        var _key = $("#message").attr('key');
+
+        var ref = firebase.database().ref("post/" + _key + "/");
+        ref.remove()
+            .then(function () {
+                alert('Success');
+            })
+            .catch(function (error) {
+                console.log("Remove failed: " + error.message);
+            });
+    }
 
 }
